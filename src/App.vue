@@ -39,6 +39,10 @@
   import RocketView from './Rocket.vue';
   import Rocket from './Rocket.js';
 
+  //TODO
+  // Cost to research autopilot
+  // Have to buy research lab to start research
+  // More research topics, perhaps rocket speed?
   export default {
     name: 'app',
     data() {
