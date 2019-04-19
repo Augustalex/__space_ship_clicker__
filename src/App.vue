@@ -13,7 +13,13 @@
     <div class="bottom">
       <button v-if="view !== 'research'" @click="view = 'research'" class="navigate-up">↑</button>
       <div class="toolbar">
-        <button v-if="canBuyRocket" :disabled="money < 1000" @click="buyRocket">Rocket +1</button>
+        <button
+          v-if="canBuyRocket"
+          :disabled="!canAffordRocket"
+          :title="`Cost: $${rocketCost}`"
+          @click="buyRocket">
+          Rocket +1
+        </button>
       </div>
       <div class="money">${{ money }}</div>
       <div class="rockets">
@@ -39,7 +45,7 @@
       return {
         view: 'launch',
         rockets: [{ level: 1 }],
-        money: 100000,
+        money: 0,
         research: {
           autopilot: 0
         },
@@ -53,6 +59,13 @@
         return {
           top: this.view === 'launch' ? '-100%' : '0'
         };
+      },
+      rocketCost() {
+        let rocketCount = this.rockets.length;
+        return (rocketCount * rocketCount) * 500;
+      },
+      canAffordRocket() {
+        return this.money >= this.rocketCost;
       },
       canBuyRocket() {
         return this.rockets.length < 20;
@@ -76,7 +89,7 @@
         });
       },
       buyRocket() {
-        this.money -= 1000;
+        this.money -= this.rocketCost;
         let rocket = Rocket({ level: 1 });
         this.rockets.push(rocket.normalize());
       },
